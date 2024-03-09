@@ -8,13 +8,30 @@
 using namespace std;
 
 double func(double x) {
-    double result = 0;
     return (1.0 - exp(-x)) / x;
 }
 
+double func2(double x) { //double func2(double x, double res)
+    double result = 0.0;
+    double taylor = 1.0;
+    int n = 2;
+    while (n<100000) { // while(abs(result-res) > numeric_limits<double>::epsilon()) {
+        result += taylor;
+        taylor *= -x / n;
+        n++;
+    }
+    return result;
+}
+
+
+double errorLog10(double x, double y) {
+	return log10(abs(x - y) / y);
+}
 int main() {
     ifstream data("dane_do_laboratorium_2.txt");
-    ofstream results("results.txt");
+    ofstream results("dane.txt");
+    ofstream results2("dane2.txt");
+    ofstream results3("dane3.txt");
     string line;
     if (data.is_open() && results.is_open()) {
         for (int i = 0; i < 5; ++i) {
@@ -25,13 +42,24 @@ int main() {
 
             double x, log_value, exp_value;
             stream >> log_value >> x >> exp_value;
-            double e = (func(x) - exp_value) / exp_value;
-            results << scientific << setprecision(20) << log_value << " " << scientific << setprecision(20) << log10(abs(e)) << endl;
+            double e = errorLog10(func(x), exp_value);
+
+            results << scientific << setprecision(20)<< log_value << " " << scientific<<setprecision(20)<< e << endl;
+            results2 << scientific << setprecision(20)<< log_value << " " << scientific<<setprecision(20)<< errorLog10(func2(x), exp_value) << endl;
+            if (x < 0.1) {
+				results3 << scientific << setprecision(20)<< log_value << " " << scientific<<setprecision(20)<< errorLog10(func2(x), exp_value) << endl;
+			}
+            else {
+                results3 << scientific << setprecision(20)<< log_value << " " << scientific<<setprecision(20)<< errorLog10(func(x), exp_value) << endl;
+            }
         }
     }
-    double num1 = 1.00000000000000000003e-030;
-    cout<<func(1.00000000000000000003e-30)<<endl;
+
 
     data.close();
     results.close();
+    results2.close();
+    results3.close();
 }
+
+
