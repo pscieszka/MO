@@ -28,10 +28,11 @@ int main()
 	}
 	liczba_bitow--;
 	epsilon_double = epsilon_double * 2.0;
+
 	cout << "Liczba bitow mantysy dla double: " << liczba_bitow << endl;
 	cout << "Epsilon maszynowy dla double: " << epsilon_double << endl;
 
-	// zwiazek epsilonu maszynowego z precyzja arytmetyki to, ze im mniejszy epsilon maszynowy, tym wieksza precyzja arytmetyki
+	
 	return 0;	
 
 }

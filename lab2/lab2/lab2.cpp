@@ -7,18 +7,22 @@
 
 using namespace std;
 
+const double epsilon = 2.22045e-16;
 double func(double x) {
     return (1.0 - exp(-x)) / x;
 }
 
-double func2(double x) { //double func2(double x, double res)
+double func2(double x, double res) { 
     double result = 0.0;
     double taylor = 1.0;
     int n = 2;
-    while (n<100000) { // while(abs(result-res) > numeric_limits<double>::epsilon()) {
+    while (abs(result - res) > epsilon) { 
         result += taylor;
         taylor *= -x / n;
         n++;
+        if (taylor == 0) {
+			break;
+		}
     }
     return result;
 }
@@ -45,9 +49,9 @@ int main() {
             double e = errorLog10(func(x), exp_value);
 
             results << scientific << setprecision(20)<< log_value << " " << scientific<<setprecision(20)<< e << endl;
-            results2 << scientific << setprecision(20)<< log_value << " " << scientific<<setprecision(20)<< errorLog10(func2(x), exp_value) << endl;
-            if (x < 0.1) {
-				results3 << scientific << setprecision(20)<< log_value << " " << scientific<<setprecision(20)<< errorLog10(func2(x), exp_value) << endl;
+            results2 << scientific << setprecision(20)<< log_value << " " << scientific<<setprecision(20)<< errorLog10(func2(x,exp_value), exp_value) << endl;
+            if (x < 0.0) {
+				results3 << scientific << setprecision(20)<< log_value << " " << scientific<<setprecision(20)<< errorLog10(func2(x, exp_value), exp_value) << endl;
 			}
             else {
                 results3 << scientific << setprecision(20)<< log_value << " " << scientific<<setprecision(20)<< errorLog10(func(x), exp_value) << endl;
