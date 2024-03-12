@@ -8,6 +8,7 @@
 using namespace std;
 
 const double epsilon = 2.22045e-16;
+
 double func(double x) {
     return (1.0 - exp(-x)) / x;
 }

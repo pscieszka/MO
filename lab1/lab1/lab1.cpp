@@ -32,6 +32,7 @@ int main()
 	cout << "Liczba bitow mantysy dla double: " << liczba_bitow << endl;
 	cout << "Epsilon maszynowy dla double: " << epsilon_double << endl;
 
+	// prezycja arytmetyki = 2^(-(t+1)), epsilon = 2*2^(-(t+1)) => epsilon = 2^(-t)
 	
 	return 0;	
 
