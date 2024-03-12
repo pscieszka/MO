@@ -17,13 +17,13 @@ double func2(double x, double res) {
     double result = 0.0;
     double taylor = 1.0;
     int n = 2;
-    while (abs(result - res) > epsilon) { 
+    while (n<10000) {  //abs(result-res)>epsilon)
         result += taylor;
         taylor *= -x / n;
         n++;
-        if (taylor == 0) {
-			break;
-		}
+       // if (taylor == 0) {
+	   //		break;
+	   //	}
     }
     return result;
 }
