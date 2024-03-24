@@ -15,16 +15,16 @@ double functionA_picard(double x) {
 double functionB(double x) {
     return tan(2 * x) - x - 1;
 }
-void printEtapy(double x, double fx, double n) {
+void printEtapy(double x, double fx, double n, double en) {
     cout << setiosflags(ios::left);
-    cout << "x = " << setw(12) << x << " \tf(x) = " << setw(12) << fx << " \tn = "   << n << endl;
+    cout << "x = " << setw(12) << x << " \tf(x) = " << setw(12) << fx << " \tEn= " << setw(12) << en << " \tn = "   << n << endl;
 
 }
 double picard(double x0, function < double(double x) > f, int n, double TOLX, double TOLF) {
 	double x = x0;
     for (int i = 0; i < n; i++) {
 		double x1 = f(x);
-		printEtapy(x1, f(x1), i);
+		printEtapy(x1, f(x1), i, abs(x1 - x));
         if (abs(x1 - x) < TOLX) {
             cout << "Przerwano z kryterium dokladnosci TOLX" << endl;
 			return x1;
@@ -45,8 +45,9 @@ double bisekcja(double a, double b, function < double(double x) > f, int n, doub
     for (int i = 0; i < n; i++) {
         
         double c = (a + b) / 2.0;
-        printEtapy(c, f(c), i);
-        if (f(c) == 0 || (b - a) / 2.0 < TOLX ) {
+
+        printEtapy(c, f(c), i, (b - a) / 2.0);
+        if (f(c) == 0 || abs((b - a) / 2.0) < TOLX ) {
             cout << "Przerwano z kryterium dokladnosci TOLX" << endl;
             return c;
         }
@@ -71,7 +72,7 @@ double newtona(double x0, function < double(double x) > f, function < double(dou
 	double x = x0;
     for (int i = 0; i < n; i++) {
 		double x1 = x - f(x) / df(x);
-		printEtapy(x1, f(x1), i);
+		printEtapy(x1, f(x1), i, abs(x1 - x));
         if (abs(x1 - x) < TOLX) {
             cout << "Przerwano z kryterium dokladnosci TOLX" << endl;
 			return x1;
@@ -84,23 +85,23 @@ double newtona(double x0, function < double(double x) > f, function < double(dou
     cout << "Przerwano z powodu przekroczenia liczby iteracji" << endl;
 	return x;
 }
-double sieczne(double x0, double x1, function < double(double x) > f, int n, double TOLX, double TOLF) {
+double sieczne(double x0, double x0_2, function < double(double x) > f, int n, double TOLX, double TOLF) {
 	double x = x0;
-	double x_1 = x1;
+	double x1 = x0_2;
     for (int i = 0; i < n; i++) {
-		double x2 = x_1 - f(x_1) * (x_1 - x) / (f(x_1) - f(x));
-		printEtapy(x2, f(x2), i);
-        if (abs(x2 - x_1) < TOLX) {
+		double x2 = x1 - f(x1) * (x1 - x) / (f(x1) - f(x));
+		printEtapy(x2, f(x2), i, abs(x2 - x1));
+        if (abs(x2 - x1) < TOLX) {
             cout<<"Przerwano z kryterium dokladnosci TOLX"<<endl;   
 			return x2;
 		}
-        if (abs(f(x2) - f(x_1)) < TOLF) {
+        if (abs(f(x2) - f(x1)) < TOLF) {
 			cout<<"Przerwano z kryterium wiarygodnosci xn jako przyblizenia pierwiastka TOLF"<<endl;   
 			return x2;
 		}
 
-		x = x_1;
-		x_1 = x2;
+		x = x1;
+		x1 = x2;
 	}
     cout<<"Przerwano z powodu przekroczenia liczby iteracji"<<endl;
 	return x;
@@ -113,18 +114,19 @@ int main()
     cout << "Picard funkcja 1" << endl;
     picard(5.0, functionA_picard, n, DBL_EPSILON, DBL_EPSILON);
     cout << "\nBisekcja funkcja 1" << endl;
-    bisekcja(-5.0,2, functionA, n, DBL_EPSILON, DBL_EPSILON);
+    bisekcja(2.0,-3.0, functionA, n, DBL_EPSILON, DBL_EPSILON);
     cout << "\nNewtona funkcja 1" << endl;
-    newtona(5.0, functionA, [](double x) { return 0.25 * sin(x / 2.0) - 1; }, n, DBL_EPSILON, DBL_EPSILON);
+    newtona(2.0, functionA, [](double x) { return 0.25 * sin(x / 2.0); }, n, DBL_EPSILON, DBL_EPSILON);
     cout << "\nSieczne funkcja 1" << endl;
     sieczne(5.0, 6.0, functionA, n, DBL_EPSILON, DBL_EPSILON);
+
     cout << "\nPicard funkcja 2" << endl;
-    picard(5.0, functionB, n, DBL_EPSILON, DBL_EPSILON);
+    picard(0.4, functionB, n, DBL_EPSILON, DBL_EPSILON);
     cout << "\nBisekcja funkcja 2" << endl;
-    bisekcja(-5.0,2, functionB, n, DBL_EPSILON, DBL_EPSILON);
+    bisekcja(0.4, 0.7, functionB, n, DBL_EPSILON, DBL_EPSILON);
     cout << "\nNewtona funkcja 2" << endl;
-    newtona(5.0, functionB, [](double x) { return 2.0 / (cos(2 * x) * cos(2 * x)) - 1; }, n, DBL_EPSILON, DBL_EPSILON);
+    newtona(0.4, functionB, [](double x) { return 2.0 / (cos(2 * x) * cos(2 * x)); }, n, DBL_EPSILON, DBL_EPSILON);
     cout << "\nSieczne funkcja 2" << endl;
-    sieczne(5.0, 6.0, functionB, n, DBL_EPSILON, DBL_EPSILON);
+    sieczne(0.4, 0.7, functionB, n, DBL_EPSILON, DBL_EPSILON);
 
 }

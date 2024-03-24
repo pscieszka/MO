@@ -1,5 +1,4 @@
 ﻿#include <iostream>
-#include <iomanip>
 
 using namespace std;
 
@@ -62,6 +61,6 @@ void newton(double x, double y, double z) {
 
 int main()
 {
-    newton(1, 1, 1);
+    newton(2, 3, 4);
 }
 
