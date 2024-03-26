@@ -71,7 +71,7 @@ double bisekcja(double a, double b, function < double(double x) > f, int n, doub
 double newtona(double x0, function < double(double x) > f, function < double(double x) > df, int n, double TOLX, double TOLF) {
 	double x = x0;
     for (int i = 0; i < n; i++) {
-		double x1 = x - f(x) / df(x);
+		double x1 = x - (f(x) / df(x));
 		printEtapy(x1, f(x1), i, abs(x1 - x));
         if (abs(x1 - x) < TOLX) {
             cout << "Przerwano z kryterium dokladnosci TOLX" << endl;
@@ -111,22 +111,24 @@ double sieczne(double x0, double x0_2, function < double(double x) > f, int n, d
 int main()
 {
     int const n = 50;
+    double const TOLX = DBL_EPSILON;
+    double const TOLF = DBL_EPSILON;
     cout << "Picard funkcja 1" << endl;
-    picard(5.0, functionA_picard, n, DBL_EPSILON, DBL_EPSILON);
+    picard(5.0, functionA_picard, n, TOLX, TOLF);
     cout << "\nBisekcja funkcja 1" << endl;
-    bisekcja(2.0,-3.0, functionA, n, DBL_EPSILON, DBL_EPSILON);
+    bisekcja(2.0,-3.0, functionA, n, TOLX, TOLF);
     cout << "\nNewtona funkcja 1" << endl;
-    newtona(2.0, functionA, [](double x) { return 0.25 * sin(x / 2.0); }, n, DBL_EPSILON, DBL_EPSILON);
+    newtona(2.0, functionA, [](double x) { return 0.25 * sin(x / 2.0)-1; }, n, TOLX, TOLF);
     cout << "\nSieczne funkcja 1" << endl;
-    sieczne(5.0, 6.0, functionA, n, DBL_EPSILON, DBL_EPSILON);
+    sieczne(4.0, 6.0, functionA, n, TOLX, TOLF);
 
     cout << "\nPicard funkcja 2" << endl;
-    picard(0.4, functionB, n, DBL_EPSILON, DBL_EPSILON);
+    picard(1.0, functionB, n, TOLX, TOLF);
     cout << "\nBisekcja funkcja 2" << endl;
-    bisekcja(0.4, 0.7, functionB, n, DBL_EPSILON, DBL_EPSILON);
+    bisekcja(0.4, 0.7, functionB, n, TOLX, TOLF);
     cout << "\nNewtona funkcja 2" << endl;
-    newtona(0.4, functionB, [](double x) { return 2.0 / (cos(2 * x) * cos(2 * x)); }, n, DBL_EPSILON, DBL_EPSILON);
+    newtona(0.4, functionB, [](double x) { return 2.0 / (cos(2 * x) * cos(2 * x)) - 1; }, n, TOLX, TOLF);
     cout << "\nSieczne funkcja 2" << endl;
-    sieczne(0.4, 0.7, functionB, n, DBL_EPSILON, DBL_EPSILON);
+    sieczne(0.4, 0.7, functionB, n, TOLX, TOLF);
 
 }
